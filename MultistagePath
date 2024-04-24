@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <limits.h>
+
+#define V 8 // Number of vertices
+#define INF INT_MAX
+
+int min(int a, int b) {
+    return (a < b) ? a : b;
+}
+
+int minCost(int cost[][V], int* path) {
+    int dist[V];
+    dist[V-1] = 0;
+
+    // Calculate shortest paths from last vertex to first
+    for (int i = V - 2; i >= 0; i--) {
+        dist[i] = INF;
+        for (int j = i; j < V; j++) {
+            if (cost[i][j] == INF) continue;
+            if (dist[i] > cost[i][j] + dist[j]) {
+                dist[i] = cost[i][j] + dist[j];
+                path[i] = j; // Update parent vertex
+            }
+        }
+    }
+
+    return dist[0]; // Minimum cost from first to last vertex
+}
+
+void printPath(int* path) {
+    int vertex = 0;
+    printf("Shortest path: %d ", vertex);
+    while (path[vertex] != V - 1) {
+        printf("%d ", path[vertex]);
+        vertex = path[vertex];
+    }
+    printf("%d\n", V - 1);
+}
+
+int main() {
+    // Example cost matrix for a multistage graph
+    int cost[V][V] = {
+        {INF, 1, 2, 5, INF, INF, INF, INF},
+        {INF, INF, INF, INF, 4, 11, INF, INF},
+        {INF, INF, INF, INF, 9, 5, 16, INF},
+        {INF, INF, INF, INF, INF, INF, 2, INF},
+        {INF, INF, INF, INF, INF, INF, INF, 18},
+        {INF, INF, INF, INF, INF, INF, INF, 13},
+        {INF, INF, INF, INF, INF, INF, INF, 2},
+        {INF, INF, INF, INF, INF, INF, INF, INF}
+    };
+
+    int path[V]; // To store the path
+    int minCostPath = minCost(cost, path);
+    printf("Minimum cost from first to last vertex: %d\n", minCostPath);
+    printPath(path);
+
+    return 0;
+}
+    printPath(path);
+
+    return 0;
+}
